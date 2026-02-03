@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Altaf | Portfolio</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { background-color: #0f172a; color: #f8fafc; }
+        .gradient-text {
+            background: linear-gradient(to right, #38bdf8, #818cf8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+    </style>
+</head>
+<body class="font-sans antialiased">
+
+    <nav class="p-6 flex justify-between items-center max-w-6xl mx-auto">
+        <h1 class="text-2xl font-bold gradient-text">ALTAF.</h1>
+        <div class="space-x-6 text-gray-400">
+            <a href="#projects" class="hover:text-white transition">Projects</a>
+            <a href="#skills" class="hover:text-white transition">Skills</a>
+            <a href="mailto:your-email@example.com" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-500">Contact</a>
+        </div>
+    </nav>
+
+    <header class="max-w-6xl mx-auto px-6 py-24 text-center md:text-left">
+        <h2 class="text-5xl md:text-7xl font-extrabold mb-6">Full Stack <br><span class="gradient-text">Developer.</span></h2>
+        <p class="text-gray-400 text-xl max-w-2xl mb-8">Building scalable web applications and specializing in Node.js, Express, and modern frontend design.</p>
+        <div class="flex flex-wrap gap-4 justify-center md:justify-start">
+            <a href="#projects" class="border border-gray-700 px-8 py-3 rounded-full hover:bg-gray-800 transition">View My Work</a>
+        </div>
+    </header>
+
+    <section id="projects" class="max-w-6xl mx-auto px-6 py-20">
+        <h3 class="text-3xl font-bold mb-12">Featured Projects</h3>
+        <div class="grid md:grid-cols-2 gap-8">
+            <div class="bg-gray-800/50 p-8 rounded-2xl border border-gray-700 hover:border-blue-500 transition">
+                <h4 class="text-xl font-bold mb-2 text-blue-400">Quran Decor E-commerce</h4>
+                <p class="text-gray-400 mb-4">A specialized platform for Islamic home decor built with Node.js and Express.</p>
+                <div class="flex gap-2 text-xs font-mono">
+                    <span class="bg-gray-900 px-2 py-1 rounded">EJS</span>
+                    <span class="bg-gray-900 px-2 py-1 rounded">Node.js</span>
+                    <span class="bg-gray-900 px-2 py-1 rounded">MongoDB</span>
+                </div>
+            </div>
+            <div class="bg-gray-800/50 p-8 rounded-2xl border border-gray-700 hover:border-blue-500 transition">
+                <h4 class="text-xl font-bold mb-2 text-blue-400">DFA Visualization Tool</h4>
+                <p class="text-gray-400 mb-4">An interactive tool to visualize Deterministic Finite Automata logic for computer science studies.</p>
+                <div class="flex gap-2 text-xs font-mono">
+                    <span class="bg-gray-900 px-2 py-1 rounded">JavaScript</span>
+                    <span class="bg-gray-900 px-2 py-1 rounded">Canvas API</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="border-t border-gray-800 py-10 text-center text-gray-500 text-sm">
+        <p>&copy; 2026 altafportfolio.in. Built with Tailwind CSS.</p>
+    </footer>
+
+</body>
+</html>
