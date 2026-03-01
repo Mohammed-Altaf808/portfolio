@@ -1,64 +1,647 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Altaf | Portfolio</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        body { background-color: #0f172a; color: #f8fafc; }
-        .gradient-text {
-            background: linear-gradient(to right, #38bdf8, #818cf8);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mohammed Altaf | SDE Portfolio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #070b14;
+      --surface: #0d1526;
+      --border: #1a2540;
+      --accent: #00e5ff;
+      --accent2: #7c3aed;
+      --text: #e2e8f0;
+      --muted: #64748b;
+      --card-bg: rgba(13, 21, 38, 0.7);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: 'Syne', sans-serif;
+      overflow-x: hidden;
+    }
+
+    /* ── Noise texture overlay ── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.35;
+    }
+
+    /* ── Grid lines ── */
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(0,229,255,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,229,255,0.03) 1px, transparent 1px);
+      background-size: 60px 60px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ── Glow blobs ── */
+    .blob {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(120px);
+      opacity: 0.12;
+      pointer-events: none;
+      z-index: 0;
+    }
+    .blob-1 { width: 600px; height: 600px; background: var(--accent); top: -200px; right: -100px; }
+    .blob-2 { width: 500px; height: 500px; background: var(--accent2); bottom: -150px; left: -100px; }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.25rem 3rem;
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+      background: rgba(7,11,20,0.75);
+    }
+    .nav-logo {
+      font-size: 1.3rem;
+      font-weight: 800;
+      letter-spacing: -0.04em;
+      color: var(--accent);
+      text-decoration: none;
+    }
+    .nav-links { display: flex; gap: 2rem; align-items: center; }
+    .nav-links a {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--text); }
+    .nav-cta {
+      color: var(--bg) !important;
+      background: var(--accent);
+      padding: 0.5rem 1.25rem;
+      border-radius: 6px;
+      font-size: 0.8rem !important;
+      transition: opacity 0.2s !important;
+    }
+    .nav-cta:hover { opacity: 0.85; color: var(--bg) !important; }
+
+    /* ── SECTIONS ── */
+    section, header { position: relative; z-index: 1; }
+
+    /* ── HERO ── */
+    header {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 8rem 3rem 4rem;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-family: 'DM Mono', monospace;
+      font-size: 0.75rem;
+      color: var(--accent);
+      border: 1px solid rgba(0,229,255,0.3);
+      padding: 0.4rem 1rem;
+      border-radius: 100px;
+      margin-bottom: 2rem;
+      letter-spacing: 0.08em;
+    }
+    .hero-badge::before {
+      content: '';
+      display: inline-block;
+      width: 6px; height: 6px;
+      background: var(--accent);
+      border-radius: 50%;
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(1.4); }
+    }
+    h1 {
+      font-size: clamp(3rem, 8vw, 6rem);
+      font-weight: 800;
+      line-height: 1.0;
+      letter-spacing: -0.04em;
+      margin-bottom: 1.5rem;
+    }
+    .accent-text { color: var(--accent); }
+    .hero-sub {
+      font-size: 1.15rem;
+      color: var(--muted);
+      max-width: 560px;
+      line-height: 1.7;
+      margin-bottom: 2.5rem;
+      font-weight: 400;
+    }
+    .hero-actions { display: flex; gap: 1rem; flex-wrap: wrap; }
+    .btn {
+      text-decoration: none;
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      font-size: 0.85rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      padding: 0.8rem 1.8rem;
+      border-radius: 8px;
+      transition: all 0.25s;
+    }
+    .btn-primary {
+      background: var(--accent);
+      color: var(--bg);
+    }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,229,255,0.35); }
+    .btn-ghost {
+      border: 1px solid var(--border);
+      color: var(--text);
+    }
+    .btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
+
+    /* ── STATS ── */
+    .stats {
+      display: flex;
+      gap: 3rem;
+      margin-top: 4rem;
+      padding-top: 2.5rem;
+      border-top: 1px solid var(--border);
+      flex-wrap: wrap;
+    }
+    .stat-num {
+      font-size: 2rem;
+      font-weight: 800;
+      color: var(--accent);
+      line-height: 1;
+    }
+    .stat-label {
+      font-size: 0.75rem;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-top: 0.3rem;
+    }
+
+    /* ── SECTION TITLE ── */
+    .section-wrap {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 6rem 3rem;
+    }
+    .section-label {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.7rem;
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      margin-bottom: 0.75rem;
+    }
+    .section-title {
+      font-size: clamp(2rem, 4vw, 3rem);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      margin-bottom: 3rem;
+    }
+
+    /* ── PROJECTS ── */
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(480px, 1fr));
+      gap: 1.5rem;
+    }
+    .project-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 2rem;
+      transition: all 0.3s;
+      backdrop-filter: blur(10px);
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+    .project-card:hover {
+      border-color: var(--accent);
+      transform: translateY(-4px);
+      box-shadow: 0 12px 40px rgba(0,229,255,0.1);
+    }
+    .project-header { display: flex; justify-content: space-between; align-items: flex-start; }
+    .project-icon {
+      width: 42px; height: 42px;
+      background: rgba(0,229,255,0.1);
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.2rem;
+    }
+    .project-links { display: flex; gap: 0.75rem; }
+    .project-links a {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 0.78rem;
+      font-family: 'DM Mono', monospace;
+      letter-spacing: 0.05em;
+      transition: color 0.2s;
+      border: 1px solid var(--border);
+      padding: 0.3rem 0.75rem;
+      border-radius: 6px;
+    }
+    .project-links a:hover { color: var(--accent); border-color: var(--accent); }
+    .project-name {
+      font-size: 1.15rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+    .project-desc {
+      font-size: 0.9rem;
+      color: var(--muted);
+      line-height: 1.65;
+      font-weight: 400;
+    }
+    .project-tags { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: auto; }
+    .tag {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.7rem;
+      padding: 0.3rem 0.7rem;
+      border-radius: 6px;
+      background: rgba(255,255,255,0.05);
+      color: var(--muted);
+      letter-spacing: 0.04em;
+    }
+
+    /* ── SKILLS ── */
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 1.5rem;
+    }
+    .skill-category {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 1.75rem;
+      backdrop-filter: blur(10px);
+      transition: border-color 0.3s;
+    }
+    .skill-category:hover { border-color: rgba(0,229,255,0.3); }
+    .skill-cat-title {
+      font-size: 0.7rem;
+      font-family: 'DM Mono', monospace;
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 1rem;
+    }
+    .skill-list { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+    .skill-item {
+      font-size: 0.82rem;
+      color: var(--text);
+      background: rgba(255,255,255,0.05);
+      padding: 0.4rem 0.8rem;
+      border-radius: 6px;
+      font-weight: 600;
+    }
+
+    /* ── ABOUT / EDUCATION ── */
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+    }
+    .info-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 2rem;
+      backdrop-filter: blur(10px);
+    }
+    .info-card h4 {
+      font-size: 0.7rem;
+      font-family: 'DM Mono', monospace;
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 1rem;
+    }
+    .info-card p { color: var(--muted); font-size: 0.9rem; line-height: 1.7; font-weight: 400; }
+    .edu-entry { margin-bottom: 1.25rem; }
+    .edu-degree { font-weight: 700; font-size: 0.95rem; }
+    .edu-school { color: var(--muted); font-size: 0.85rem; margin-top: 0.25rem; }
+    .edu-year {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.7rem;
+      color: var(--accent);
+      margin-top: 0.25rem;
+    }
+
+    /* ── CONTACT ── */
+    .contact-wrap {
+      text-align: center;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    .contact-wrap p { color: var(--muted); margin-bottom: 2rem; line-height: 1.7; font-weight: 400; }
+    .contact-links { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+
+    /* ── FOOTER ── */
+    footer {
+      position: relative;
+      z-index: 1;
+      border-top: 1px solid var(--border);
+      text-align: center;
+      padding: 2rem;
+      font-family: 'DM Mono', monospace;
+      font-size: 0.75rem;
+      color: var(--muted);
+    }
+
+    /* ── ANIMATE ON LOAD ── */
+    .fade-up {
+      opacity: 0;
+      transform: translateY(24px);
+      animation: fadeUp 0.7s ease forwards;
+    }
+    .fade-up:nth-child(1) { animation-delay: 0.1s; }
+    .fade-up:nth-child(2) { animation-delay: 0.25s; }
+    .fade-up:nth-child(3) { animation-delay: 0.4s; }
+    .fade-up:nth-child(4) { animation-delay: 0.55s; }
+    @keyframes fadeUp {
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 768px) {
+      nav { padding: 1rem 1.5rem; }
+      header, .section-wrap { padding-left: 1.5rem; padding-right: 1.5rem; }
+      .projects-grid { grid-template-columns: 1fr; }
+      .about-grid { grid-template-columns: 1fr; }
+      .nav-links { gap: 1rem; }
+      .nav-links a:not(.nav-cta) { display: none; }
+    }
+  </style>
 </head>
-<body class="font-sans antialiased">
+<body>
 
-    <nav class="p-6 flex justify-between items-center max-w-6xl mx-auto">
-        <h1 class="text-2xl font-bold gradient-text">ALTAF.</h1>
-        <div class="space-x-6 text-gray-400">
-            <a href="#projects" class="hover:text-white transition">Projects</a>
-            <a href="#skills" class="hover:text-white transition">Skills</a>
-            <a href="mailto:your-email@example.com" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-500">Contact</a>
-        </div>
-    </nav>
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
 
-    <header class="max-w-6xl mx-auto px-6 py-24 text-center md:text-left">
-        <h2 class="text-5xl md:text-7xl font-extrabold mb-6">Full Stack <br><span class="gradient-text">Developer.</span></h2>
-        <p class="text-gray-400 text-xl max-w-2xl mb-8">Building scalable web applications and specializing in Node.js, Express, and modern frontend design.</p>
-        <div class="flex flex-wrap gap-4 justify-center md:justify-start">
-            <a href="#projects" class="border border-gray-700 px-8 py-3 rounded-full hover:bg-gray-800 transition">View My Work</a>
-        </div>
-    </header>
+  <!-- NAV -->
+  <nav>
+    <a href="#" class="nav-logo">MA.</a>
+    <div class="nav-links">
+      <a href="#projects">Projects</a>
+      <a href="#skills">Skills</a>
+      <a href="#about">About</a>
+      <a href="mailto:khanmohammedaltaf.7860@gmail.com" class="nav-cta">Hire Me</a>
+    </div>
+  </nav>
 
-    <section id="projects" class="max-w-6xl mx-auto px-6 py-20">
-        <h3 class="text-3xl font-bold mb-12">Featured Projects</h3>
-        <div class="grid md:grid-cols-2 gap-8">
-            <div class="bg-gray-800/50 p-8 rounded-2xl border border-gray-700 hover:border-blue-500 transition">
-                <h4 class="text-xl font-bold mb-2 text-blue-400">Quran Decor E-commerce</h4>
-                <p class="text-gray-400 mb-4">A specialized platform for Islamic home decor built with Node.js and Express.</p>
-                <div class="flex gap-2 text-xs font-mono">
-                    <span class="bg-gray-900 px-2 py-1 rounded">EJS</span>
-                    <span class="bg-gray-900 px-2 py-1 rounded">Node.js</span>
-                    <span class="bg-gray-900 px-2 py-1 rounded">MongoDB</span>
-                </div>
+  <!-- HERO -->
+  <header>
+    <div class="fade-up">
+      <span class="hero-badge">Open to SDE Roles · Fresher</span>
+    </div>
+    <h1 class="fade-up">
+      Mohammed<br>
+      <span class="accent-text">Altaf.</span>
+    </h1>
+    <p class="hero-sub fade-up">
+      Full-stack developer with a passion for building scalable systems.
+      Experienced in Node.js, Express, React, and Python — eager to ship real products.
+    </p>
+    <div class="hero-actions fade-up">
+      <a href="#projects" class="btn btn-primary">View Projects</a>
+      <a href="https://github.com/Mohammed-Altaf808" target="_blank" class="btn btn-ghost">GitHub ↗</a>
+      <a href="mailto:khanmohammedaltaf.7860@gmail.com" class="btn btn-ghost">Contact</a>
+    </div>
+    <div class="stats fade-up">
+      <div>
+        <div class="stat-num">4+</div>
+        <div class="stat-label">Projects Shipped</div>
+      </div>
+      <div>
+        <div class="stat-num">3+</div>
+        <div class="stat-label">Languages</div>
+      </div>
+      <div>
+        <div class="stat-num">Full Stack</div>
+        <div class="stat-label">Capability</div>
+      </div>
+    </div>
+  </header>
+
+  <!-- PROJECTS -->
+  <section id="projects">
+    <div class="section-wrap">
+      <div class="section-label">// selected work</div>
+      <h2 class="section-title">Featured Projects</h2>
+      <div class="projects-grid">
+
+        <div class="project-card">
+          <div class="project-header">
+            <div class="project-icon">📚</div>
+            <div class="project-links">
+              <a href="https://github.com/Mohammed-Altaf808/bookapp" target="_blank">GitHub ↗</a>
             </div>
-            <div class="bg-gray-800/50 p-8 rounded-2xl border border-gray-700 hover:border-blue-500 transition">
-                <h4 class="text-xl font-bold mb-2 text-blue-400">DFA Visualization Tool</h4>
-                <p class="text-gray-400 mb-4">An interactive tool to visualize Deterministic Finite Automata logic for computer science studies.</p>
-                <div class="flex gap-2 text-xs font-mono">
-                    <span class="bg-gray-900 px-2 py-1 rounded">JavaScript</span>
-                    <span class="bg-gray-900 px-2 py-1 rounded">Canvas API</span>
-                </div>
-            </div>
+          </div>
+          <div class="project-name">Book App</div>
+          <div class="project-desc">
+            A full-stack web application for managing and browsing books. Features server-side rendering with EJS, CRUD operations, and a clean UI for listing, adding, and managing book entries.
+          </div>
+          <div class="project-tags">
+            <span class="tag">EJS</span>
+            <span class="tag">Node.js</span>
+            <span class="tag">Express</span>
+            <span class="tag">MongoDB</span>
+          </div>
         </div>
-    </section>
 
-    <footer class="border-t border-gray-800 py-10 text-center text-gray-500 text-sm">
-        <p>&copy; 2026 altafportfolio.in. Built with Tailwind CSS.</p>
-    </footer>
+        <div class="project-card">
+          <div class="project-header">
+            <div class="project-icon">💰</div>
+            <div class="project-links">
+              <a href="https://github.com/Mohammed-Altaf808/salaryprediction" target="_blank">GitHub ↗</a>
+            </div>
+          </div>
+          <div class="project-name">Salary Prediction Model</div>
+          <div class="project-desc">
+            A machine learning model that predicts salary based on experience, education, and role. Trained with regression algorithms, includes data preprocessing and visualization using pandas and matplotlib.
+          </div>
+          <div class="project-tags">
+            <span class="tag">Python</span>
+            <span class="tag">scikit-learn</span>
+            <span class="tag">pandas</span>
+            <span class="tag">matplotlib</span>
+            <span class="tag">ML</span>
+          </div>
+        </div>
 
-</body>
-</html>
+        <div class="project-card">
+          <div class="project-header">
+            <div class="project-icon">🏠</div>
+            <div class="project-links">
+              <a href="https://github.com/Mohammed-Altaf808/VOIS_AICTE_Oct2025_mohammed_altaf" target="_blank">GitHub ↗</a>
+            </div>
+          </div>
+          <div class="project-name">Airbnb Price Prediction</div>
+          <div class="project-desc">
+            An ML model to estimate Airbnb listing prices using features like location, amenities, and room type. Built as part of the VOIS × AICTE program — includes EDA, feature engineering, and model evaluation.
+          </div>
+          <div class="project-tags">
+            <span class="tag">Python</span>
+            <span class="tag">scikit-learn</span>
+            <span class="tag">pandas</span>
+            <span class="tag">EDA</span>
+            <span class="tag">Regression</span>
+          </div>
+        </div>
+
+
+
+      </div>
+    </div>
+  </section>
+
+  <!-- SKILLS -->
+  <section id="skills">
+    <div class="section-wrap">
+      <div class="section-label">// technical arsenal</div>
+      <h2 class="section-title">Skills</h2>
+      <div class="skills-grid">
+        <div class="skill-category">
+          <div class="skill-cat-title">Languages</div>
+          <div class="skill-list">
+            <span class="skill-item">JavaScript</span>
+            <span class="skill-item">Python</span>
+            <span class="skill-item">Java</span>
+            <span class="skill-item">C++</span>
+            <span class="skill-item">SQL</span>
+          </div>
+        </div>
+        <div class="skill-category">
+          <div class="skill-cat-title">Frontend</div>
+          <div class="skill-list">
+            <span class="skill-item">React</span>
+            <span class="skill-item">HTML5</span>
+            <span class="skill-item">CSS3</span>
+            <span class="skill-item">Tailwind</span>
+            <span class="skill-item">EJS</span>
+          </div>
+        </div>
+        <div class="skill-category">
+          <div class="skill-cat-title">Backend</div>
+          <div class="skill-list">
+            <span class="skill-item">Node.js</span>
+            <span class="skill-item">Express.js</span>
+            <span class="skill-item">REST APIs</span>
+            <span class="skill-item">Socket.io</span>
+          </div>
+        </div>
+        <div class="skill-category">
+          <div class="skill-cat-title">Databases</div>
+          <div class="skill-list">
+            <span class="skill-item">MongoDB</span>
+            <span class="skill-item">MySQL</span>
+            <span class="skill-item">Mongoose</span>
+          </div>
+        </div>
+        <div class="skill-category">
+          <div class="skill-cat-title">Tools & DevOps</div>
+          <div class="skill-list">
+            <span class="skill-item">Git</span>
+            <span class="skill-item">GitHub</span>
+            <span class="skill-item">Vercel</span>
+            <span class="skill-item">Postman</span>
+            <span class="skill-item">VS Code</span>
+          </div>
+        </div>
+        <div class="skill-category">
+          <div class="skill-cat-title">CS Fundamentals</div>
+          <div class="skill-list">
+            <span class="skill-item">DSA</span>
+            <span class="skill-item">OOP</span>
+            <span class="skill-item">OS</span>
+            <span class="skill-item">DBMS</span>
+            <span class="skill-item">Networking</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT / EDUCATION -->
+  <section id="about">
+    <div class="section-wrap">
+      <div class="section-label">// background</div>
+      <h2 class="section-title">About Me</h2>
+      <div class="about-grid">
+        <div class="info-card">
+          <h4>Who I Am</h4>
+          <p>
+            I'm Mohammed Altaf, a full-stack developer and fresher SDE based in Hyderabad, India. I love building products that are clean, fast, and useful — from REST APIs to interactive frontends. I interned at Edunet Foundation (AICTE × IBM SkillsBuild) as an AI/ML intern and I'm actively seeking my first full-time software engineering role.
+          </p>
+        </div>
+        <div class="info-card">
+          <h4>Education</h4>
+          <div class="edu-entry">
+            <div class="edu-degree">B.E. — Computer Science & Engineering</div>
+            <div class="edu-school">Deccan College of Engineering</div>
+            <div class="edu-year">Graduating 2026</div>
+          </div>
+          <div class="edu-entry">
+            <div class="edu-degree">Intermediate (MPC) — 7.5 CGPA</div>
+            <div class="edu-school">Sharada Junior College</div>
+            <div class="edu-year">2017</div>
+          </div>
+          <div class="edu-entry">
+            <div class="edu-degree">SSC — 9.7 CGPA</div>
+            <div class="edu-school">Anjuman Boys High School</div>
+            <div class="edu-year">2020</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section>
+    <div class="section-wrap">
+      <div class="contact-wrap">
+        <div class="section-label">// let's talk</div>
+        <h2 class="section-title">Get In Touch</h2>
+        <p>I'm actively looking for SDE opportunities. Whether you have a role, a project, or just want to connect — my inbox is always open.</p>
+        <div class="contact-links">
+          <a href="mailto:khanmohammedaltaf.7860@gmail.com" class="btn btn-primary">Send Email</a>
+          <a href="https://linkedin.com/in/mohammed-altaf-935b96248" target="_blank" class="btn btn-ghost">LinkedIn ↗</a>
+          <a href="https://github.com/Mohammed-Altaf808" target="_blank" class="btn btn-ghost">GitHub ↗</a>
+          <a href="tel:+918082111788" class="btn btn-ghost">📞 +91 8082111788</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <fo
